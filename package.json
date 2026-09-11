@@ -6,9 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prisma:generate": "prisma generate --schema=src/app/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema=src/app/prisma/schema.prisma"
   },
   "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "@prisma/composer": "^0.17.0",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^16.4.7",
     "next": "16.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8"
@@ -21,7 +28,18 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "prisma": "^7.10.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true,
+    "msgpackr-extract@3.0.4": true,
+    "unrs-resolver@1.12.2": true,
+    "workerd@1.20260704.1": true
+  },
+  "overrides": {
+    "better-sqlite3": "$better-sqlite3"
   }
 }

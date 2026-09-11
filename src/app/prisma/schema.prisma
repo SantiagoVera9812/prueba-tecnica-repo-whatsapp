@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model BotConfig {
+  id           String         @id @default(cuid())
+  name         String         @default("Configuración principal")
+  systemPrompt String         @default("Eres un asistente virtual servicial y amable.")
+  model        String         @default("meta-llama/llama-3.3-70b-instruct:free")
+  temperature  Float          @default(0.7)
+  maxTokens    Int            @default(512)
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  conversations Conversation[]
+}
+
+model WhatsAppInstance {
+  id              String    @id @default(cuid())
+  instanceName    String    @unique
+  evolutionApiUrl String
+  evolutionApiKey String
+  status          String    @default("disconnected")
+  webhookUrl      String?
+  connectedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Contact {
+  id             String         @id @default(cuid())
+  phoneNumber    String         @unique
+  pushName       String?
+  firstSeenAt    DateTime       @default(now())
+  lastSeenAt     DateTime       @default(now())
+  conversations  Conversation[]
+}
+
+model Conversation {
+  id           String      @id @default(cuid())
+  contactId    String
+  contact      Contact     @relation(fields: [contactId], references: [id])
+  botConfigId  String
+  botConfig    BotConfig   @relation(fields: [botConfigId], references: [id])
+  status       String      @default("open")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  messages     Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  role           String
+  content        String
+  modelUsed      String?
+  tokensUsed     Int?
+  status         String       @default("sent")
+  createdAt      DateTime     @default(now())
+}
+
+model WebhookEvent {
+  id              String   @id @default(cuid())
+  eventType       String
+  rawPayload      String
+  processedStatus String   @default("received")
+  errorMessage    String?
+  receivedAt      DateTime @default(now())
+}
