@@ -77,14 +77,13 @@ Crea un archivo .env en el directorio raíz basándote en la estructura .env.exa
 ```bash
 # .env.example
 
-# Aplicación Next.js
-NODE_ENV=development
-PORT=3000
+# Configuración de open router
+OPENROUTER_API_KEY="reemplaza-con-tu-clave-de-openrouter"
 
 # Configuración de la API de Evolution
 EVOLUTION_API_URL=http://evolution-api:8080
 EVOLUTION_API_KEY=tu_clave_de_API_segura_aquí
-
+EVOLUTION_INSTANCE_NAME="whatsapp-bot"
 # Webhooks
 # La URL que utilizará la API de Evolution para enviar eventos POST (mensajes, actualizaciones de conexión) a tu aplicación
 APP_PUBLIC_WEBHOOK_URL=http://app:3000/api/webhook/evolution
