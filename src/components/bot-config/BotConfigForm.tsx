@@ -14,6 +14,7 @@ type Props = {
 	modelsError?: string;
 };
 
+// Componente de formulario para configurar el bot, incluyendo el prompt del sistema, el modelo de OpenRouter y la temperatura. Maneja la carga de modelos y los errores.
 export function BotConfigForm({ config: initialConfig, saving, onSave, models, modelsLoading, modelsError }: Props) {
 	const [config, setConfig] = useState(initialConfig);
 	const [message, setMessage] = useState('');
@@ -33,7 +34,6 @@ export function BotConfigForm({ config: initialConfig, saving, onSave, models, m
 		<form onSubmit={handleSubmit}>
 			<label htmlFor="prompt">Prompt del sistema</label>
 			<textarea id="prompt" rows={7} value={config.prompt} onChange={(event) => setConfig({ ...config, prompt: event.target.value })} required />
-
 			<label htmlFor="model">Modelo de OpenRouter</label>
 			{modelsLoading ? <ModelSelectSkeleton /> : (
 				<select id="model" value={config.model} onChange={(event) => setConfig({ ...config, model: event.target.value })} required>

@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-
+// Repositorio para manejar la configuración del bot en la base de datos. Proporciona métodos para obtener o crear la configuración del bot y guardar cambios en la configuración.
 export const defaultBotConfig = {
 	name: 'Configuración principal',
 	systemPrompt: 'Eres un asistente de IA útil y conciso.',

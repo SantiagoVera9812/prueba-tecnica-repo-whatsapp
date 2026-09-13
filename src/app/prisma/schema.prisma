@@ -26,6 +26,7 @@ model WhatsAppInstance {
   evolutionApiUrl String
   evolutionApiKey String
   status          String    @default("disconnected")
+  qrCode          String?
   webhookUrl      String?
   connectedAt     DateTime?
   createdAt       DateTime  @default(now())

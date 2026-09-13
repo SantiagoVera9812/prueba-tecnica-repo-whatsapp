@@ -1,5 +1,5 @@
-import AdminPage from './admin/page';
+import { ConnectionPage } from '@/components/instance/ConnectionPage';
 
 export default function Home() {
-  return <AdminPage />;
+  return <ConnectionPage />;
 }

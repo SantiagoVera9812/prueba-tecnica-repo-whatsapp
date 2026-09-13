@@ -1,5 +1,6 @@
 import type { BotConfigInput } from '@/lib/types/bot-config';
 
+// Función para analizar y validar un objeto desconocido como BotConfigInput. Devuelve el objeto validado si es válido, o null si no lo es. Se asegura de que el prompt y el modelo sean cadenas no vacías y que la temperatura sea un número finito entre 0 y 2.
 export function parseBotConfigInput(value: unknown): BotConfigInput | null {
 	if (!value || typeof value !== 'object') return null;
 

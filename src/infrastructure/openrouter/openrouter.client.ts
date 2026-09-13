@@ -31,7 +31,7 @@ export class OpenRouterClient {
 		private readonly baseUrl = (process.env.OPENROUTER_BASE_URL ?? 'https://openrouter.ai/api/v1').replace(/\/$/, ''),
 	) {}
 
-	async chatCompletion(input: { model: string; temperature: number; messages: ChatMessage[] }) {
+	async chatCompletion(input: { model: string; temperature: number; maxTokens: number; messages: ChatMessage[] }) {
 		if (!this.apiKey) throw new Error('OPENROUTER_API_KEY no está configurada.');
 
 		const response = await fetch(`${this.baseUrl}/chat/completions`, {

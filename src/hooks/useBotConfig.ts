@@ -9,10 +9,13 @@ type AsyncState<T> =
 	| { status: 'error'; error: string }
 	| { status: 'success'; data: T };
 
+
+//Hook personalizado para manejar la configuración del bot, incluyendo la carga y el guardado de la configuración.
 export function useBotConfig() {
 	const [state, setState] = useState<AsyncState<BotConfig>>({ status: 'loading' });
 	const [saving, setSaving] = useState(false);
 
+	// Función para refrescar la configuración del bot desde el servidor.
 	async function refresh() {
 		setState({ status: 'loading' });
 		try {
@@ -22,6 +25,7 @@ export function useBotConfig() {
 		}
 	}
 
+	// Efecto para cargar la configuración del bot al montar el hook.
 	useEffect(() => {
 		let active = true;
 
@@ -38,6 +42,7 @@ export function useBotConfig() {
 		};
 	}, []);
 
+	// Función para guardar la configuración del bot en el servidor.
 	async function save(config: BotConfigInput) {
 		setSaving(true);
 		try {

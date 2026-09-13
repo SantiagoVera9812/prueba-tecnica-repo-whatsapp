@@ -3,6 +3,8 @@ import type { BotConfigInput } from '@/lib/types/bot-config';
 
 export type { BotConfigInput } from '@/lib/types/bot-config';
 
+
+// Servicio para manejar la configuración del bot, incluyendo la obtención y el guardado de la configuración. Utiliza el repositorio BotConfigRepository para interactuar con la base de datos.
 export class BotConfigService {
 	constructor(private readonly repository = new BotConfigRepository()) {}
 
