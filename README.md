@@ -42,37 +42,41 @@ graph TD
 | **Infraestructura (clientes externos)** | `infrastructure/openrouter/`, `infrastructure/evolution/`, `infrastructure/db/` | Encapsular el detalle HTTP de cada proveedor externo y exponer métodos simples de dominio: `openrouterClient.chatCompletion(messages, model, temperature, maxTokens)`, `evolutionClient.sendText(phone, text)`, `evolutionClient.getQrCode(instance)`. | Contener reglas de negocio del bot. |
 
 ## Decisiones Arquitectónicas
-### Segregación de Comandos vs. Eventos (REST vs. SSE): 
-La arquitectura divide estrictamente cómo el frontend envía acciones y cómo recibe respuestas asíncronas de Evolution API:
-#### Comandos vía REST (lib/api-client/): 
-Acciones directas del usuario que requieren una respuesta inmediata (ej. hacer clic en "Vincular" llama a POST /api/instance/connect, o "Desvincular" llama a DELETE /api/instance). Los hooks delegan estas llamadas HTTP clásicas a los clientes API para iniciar procesos.
-#### Observación vía SSE (EventSource): 
-Dado que Evolution API procesa actualizaciones de QR y cierres de sesión de forma asíncrona a través de webhooks, el frontend no hace polling para esperar el resultado. En su lugar, el hook useInstanceConnection escucha un stream EventSource. Cuando Evolution API confirma la creación o eliminación de una instancia, el servidor empuja el nuevo estado directamente a la UI.
 
-## Pub/Sub en Memoria: 
-La transmisión en tiempo real se basa en un singleton EventEmitter nativo de Node. Debido a que el servidor Next.js procesa tanto las rutas de webhooks como los streams SSE en un solo contenedor, esto evita la sobrecarga de desplegar un broker de mensajería externo como Redis.
-## Estado de Desconexión Personalizado: 
-La UI utiliza un estado inventado ('disconnecting') para proporcionar retroalimentación visual inmediata y precisa durante el proceso de desmontaje, mientras se espera a que Evolution API confirme el cierre de sesión real a través del webhook.
+### Segregación de comandos vs. eventos (REST vs. SSE)
+La arquitectura divide estrictamente cómo el frontend envía acciones y cómo recibe respuestas asíncronas de Evolution API:
+
+- **Comandos vía REST (`lib/api-client/`)**: acciones directas del usuario que requieren una respuesta inmediata (ej. hacer clic en "Vincular" llama a `POST /api/instance/connect`, o "Desvincular" llama a `DELETE /api/instance`). Los hooks delegan estas llamadas HTTP clásicas a los clientes API para iniciar procesos.
+- **Observación vía SSE (`EventSource`)**: dado que Evolution API procesa actualizaciones de QR y cierres de sesión de forma asíncrona a través de webhooks, el frontend no hace polling para esperar el resultado. En su lugar, el hook `useInstanceConnection` escucha un stream `EventSource`. Cuando Evolution API confirma la creación o eliminación de una instancia, el servidor empuja el nuevo estado directamente a la UI.
+
+### Pub/Sub en memoria
+La transmisión en tiempo real se basa en un singleton `EventEmitter` nativo de Node. Debido a que el servidor Next.js procesa tanto las rutas de webhooks como los streams SSE en un solo contenedor, esto evita la sobrecarga de desplegar un broker de mensajería externo como Redis.
+
+### Estado de desconexión personalizado
+La UI utiliza un estado inventado (`'disconnecting'`) para proporcionar retroalimentación visual inmediata y precisa durante el proceso de desmontaje, mientras se espera a que Evolution API confirme el cierre de sesión real a través del webhook.
 
 ## Primeros pasos
-Para ejecutar la aplicación localmente, asegúrate de que Docker Desktop esté en funcionamiento y ejecuta los comandos estándar de Compose.
-Inicia el daemon de Docker:
-```bash
-open -a docker
-```
-Compila e inicia los contenedores en modo desconectado:
-```bash
-docker compose up --build -d
-```
-Abre tu navegador y ve a:
-```bash
-http://localhost:3000
-```
-##Variables de entorno
-Crea un archivo .env en el directorio raíz basándote en la estructura .env.example que se muestra a continuación. Estas variables conectan tu aplicación Next.js al contenedor de la API de Evolution y definen la URL de devolución de llamada de tu webhook.
 
-# .env.example
+Para ejecutar la aplicación localmente, asegúrate de que Docker Desktop esté en funcionamiento y sigue estos pasos:
+
+1. Inicia el daemon de Docker:
+   ```bash
+   open -a docker
+   ```
+2. Compila e inicia los contenedores en modo desconectado:
+   ```bash
+   docker compose up --build -d
+   ```
+3. Abre tu navegador y ve a:
+   ```bash
+   http://localhost:3000
+   ```
+
+## Variables de entorno
+Crea un archivo .env en el directorio raíz basándote en la estructura .env.example que se muestra a continuación. Estas variables conectan tu aplicación Next.js al contenedor de la API de Evolution y definen la URL de devolución de llamada de tu webhook.
 ```bash
+# .env.example
+
 # Aplicación Next.js
 NODE_ENV=development
 PORT=3000
@@ -89,4 +93,3 @@ APP_PUBLIC_WEBHOOK_URL=http://app:3000/api/webhook/evolution
 # Ruta a la base de datos SQLite local dentro del contenedor de Docker
 DATABASE_URL="file:/app/data/dev.db"
 ```
-
