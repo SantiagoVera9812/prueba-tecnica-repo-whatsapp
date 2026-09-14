@@ -4,7 +4,7 @@ import type { InstanceConnection } from '@/lib/types/instance';
 
 export const dynamic = 'force-dynamic';
 
-const DISCONNECT_RECHECK_MS = 20_000000000; 
+const DISCONNECT_RECHECK_MS = 20_0000; 
 // app/api/instance/events/route.ts
 // GET: Devuelve un flujo de eventos del estado de la conexión de la instancia de WhatsApp. Envía actualizaciones en tiempo real sobre el estado de la conexión y el código QR (si está disponible) a los clientes suscritos. Maneja la reconexión automática si la instancia entra en estado "disconnecting" y envía latidos para mantener la conexión abierta.
 export async function GET(request: Request) {

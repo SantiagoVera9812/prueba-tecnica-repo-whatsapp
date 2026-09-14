@@ -23,7 +23,7 @@ function extractQrBase64(data: unknown): string | null {
 }
 // Clase para manejar la conexión de la instancia de WhatsApp, incluyendo la obtención del estado de la conexión, el inicio de la conexión, la eliminación de la instancia y la aplicación de actualizaciones de estado y código QR. Utiliza un EventEmitter para publicar actualizaciones de estado y permite suscribirse a estos eventos.
 export class InstanceService {
-	private static readonly DISCONNECT_TIMEOUT_MS = 20_000000000;
+	private static readonly DISCONNECT_TIMEOUT_MS = 20_0000; // 20 segundos
 	
 	private operationChain: Promise<unknown> = Promise.resolve();
 
